@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { IonIcon } from 'react-ion-icon';
-import { BASE_URL } from '../utils.ts';
+import { BASE_URL } from '../utils';
 import { Header } from './Header';
 import './styles/index.css'
 
