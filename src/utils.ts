@@ -1,0 +1,1 @@
+export const BASE_URL = 'http://fightclubmc.pythonanywhere.com/api/v_1_2_0'
