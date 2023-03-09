@@ -1,1 +1,1 @@
-export const BASE_URL = 'http://localhost:5000/api/v_1_2_0'
+export const BASE_URL = 'https://fightclubmc.pythonanywhere.com/api/v_1_2_5'
