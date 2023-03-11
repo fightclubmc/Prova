@@ -1,3 +1,4 @@
+import { Alert, Snackbar } from '@mui/material';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { IonIcon } from 'react-ion-icon';
@@ -8,6 +9,8 @@ import './styles/index.css'
 export const Hero = () => {
 
   const [serverStats, setServerStats] = useState({})
+
+  const [popupStatus, setPopupStatus] = useState(false)
 
 
   const getServerStats = () => {
@@ -36,7 +39,7 @@ export const Hero = () => {
             <span style={{fontFamily: 'League Spartan'}} className='font-bold text-[#ffffff] text-xl'>Al momento ci sono <span className='text-[#D880D9]'>{serverStats.online_players}</span> utenti online sul nostro server</span>
           </div>
           <div className='flex' style={{padding: 18}}>
-            <button onClick={(e) => navigator.clipboard.writeText('fightclubmc.net')} style={{fontFamily: 'League Spartan', width: 140, borderRadius: 8, padding: 14}} className='bg-opacity-70 font-bold mt-5 text-[#ffffff] bg-[#9c2b88]'>INIZIA</button>
+            <button onClick={(e) => {navigator.clipboard.writeText('fightclubmc.net'); setPopupStatus(true)}} style={{fontFamily: 'League Spartan', width: 140, borderRadius: 8, padding: 14}} className='bg-opacity-70 font-bold mt-5 text-[#ffffff] bg-[#9c2b88]'>INIZIA</button>
             <button onClick={(e) => window.location.href = 'https://discord.gg/ayZbpG4G'} style={{fontFamily: 'League Spartan', width: 140, borderRadius: 8, padding: 14}} className='bg-opacity-70 bg-[#D880D9] ml-6 font-bold mt-5 text-[#9c2b88]'>DISCORD</button>
           </div>
           <div style={{padding: 18}} className='flex'>
@@ -54,6 +57,11 @@ export const Hero = () => {
           <img style={{width: 434}} src="./fightclub_7.png" alt="" />
         </div>
       </div>
+      <Snackbar anchorOrigin={{vertical: 'bottom', horizontal: 'right'}} open={popupStatus} autoHideDuration={3000} onClose={() => setPopupStatus(false)}>
+        <Alert style={{fontFamily: 'League Spartan', color: 'white', backgroundColor: 'green'}} onClose={() => setPopupStatus(false)} severity="" sx={{ width: '100%' }}>
+          Indirizzo IP copiato con successo
+        </Alert>
+      </Snackbar>
     </div>
   );
 }

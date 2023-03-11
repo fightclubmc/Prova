@@ -1,6 +1,8 @@
+import { Alert, Snackbar } from '@mui/material';
 import axios from 'axios';
 import Avatar from 'boring-avatars'
 import { useEffect, useState } from 'react'
+import { IonIcon } from 'react-ion-icon';
 import { SpinnerCircular } from 'spinners-react';
 import { BASE_URL } from '../utils';
 import './styles/index.css'
@@ -17,6 +19,8 @@ export const Home = () => {
   const [newses, setNewses] = useState([])
 
   const [isLoading, setIsLoading] = useState(true);
+
+  const [popupStatus, setPopupStatus] = useState(false)
 
   const getStaffers = async () => {
     setIsLoading(true)
@@ -92,20 +96,26 @@ export const Home = () => {
     <div className="justify-around flex w-screen bg-[#242a33]">
       {
         isLoading ? (
-          <SpinnerCircular/>
+          <SpinnerCircular />
         ) : (
-          <div className='border justify-around bodyhome flex'>
+          <div className='justify-around bodyhome flex'>
             <div>
+              <div style={{maxWidth: 1040 }} className='pl-8 mt-14 pr-14'>
+                <div style={{borderRadius: 10, fontFamily: 'League Spartan', height: 64 }} className='pl-10 pr-10 font-bold flex items-center text-[#ffffff] bg-[#2a313b]'>
+                  <IonIcon style={{color: '#9d2b88', fontSize: 18}} name="newspaper"/>
+                  <h2 className='ml-4 text-xl'>News</h2>
+                </div>
+              </div>
               {
                 newses.map(iterationNews => (
-                  <div style={{ maxWidth: 1040 }} className='pl-8 mt-14 pr-14'>
-                    <div style={{ fontFamily: 'League Spartan', height: 64 }} className='pl-10 pr-10 font-bold flex items-center text-[#ffffff] bg-[#262D37]'>
+                  <div style={{ maxWidth: 1040 }} className='pl-8 mt-10 pr-14'>
+                    <div style={{borderRadius: 8, fontFamily: 'League Spartan', height: 64 }} className='pl-10 pr-10 font-bold flex items-center text-[#ffffff] bg-[#2a313b]'>
                       <div>
                         <h2>{iterationNews.title}</h2>
                         <h2 className='text-[gray]'>{iterationNews.created_on.substring(0, 16)}</h2>
                       </div>
                     </div>
-                    <div className='mt-4 flex p-10 bg-[#262D37]'>
+                    <div style={{borderRadius: 8}} className='mt-4 flex p-10 bg-[#2a313b]'>
                       <div>
                         <div style={{ width: 114 }}>
                           <Avatar
@@ -125,10 +135,13 @@ export const Home = () => {
                   </div>
                 ))
               }
+              <div style={{ maxWidth: 1040 }} className='pl-8 mt-14 pr-14'>
+                <h2>ok</h2>
+              </div>
             </div>
             <div className='justify-around flex'>
               <div>
-                <div style={{ minHeight: 154, borderRadius: 10, width: 284 }} className='mt-14 h-auto bg-[#262D37]'>
+                <div style={{ minHeight: 154, borderRadius: 10, width: 284 }} className='mt-14 h-auto bg-[#2a313b]'>
                   <div className='p-5 items-center justify-around flex'>
                     <h2 style={{ fontFamily: 'League Spartan' }} className='font-bold text-[#ffffff]'>Staff</h2>
                   </div>
@@ -153,7 +166,7 @@ export const Home = () => {
                     }
                   </div>
                 </div>
-                <div style={{ minHeight: 154, borderRadius: 10, width: 284 }} className='mt-8 h-auto bg-[#262D37]'>
+                <div style={{ minHeight: 154, borderRadius: 10, width: 284 }} className='mt-8 h-auto bg-[#2a313b]'>
                   <div className='p-5 items-center justify-around flex'>
                     <h2 style={{ fontFamily: 'League Spartan' }} className='font-bold text-[#ffffff]'>Utenti più attivi</h2>
                   </div>
@@ -198,7 +211,7 @@ export const Home = () => {
                     }
                   </div>
                 </div>
-                <div style={{ minHeight: 194, borderRadius: 10, width: 284 }} className='mt-8 h-auto bg-[#262D37]'>
+                <div style={{ minHeight: 194, borderRadius: 10, width: 284 }} className='mt-8 h-auto bg-[#2a313b]'>
                   <div className='p-5 items-center justify-around flex'>
                     <h2 style={{ fontFamily: 'League Spartan' }} className='font-bold text-[#ffffff]'>Attività del forum</h2>
                   </div>
