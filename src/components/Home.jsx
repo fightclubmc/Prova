@@ -92,6 +92,8 @@ export const Home = () => {
     setIsLoading(false)
   }
 
+  window.localStorage.setItem("token", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTY3ODU0MzM1MSwianRpIjoiN2M2YzQwMGQtMjAzZS00NjA1LTg2MzgtNzIzNmE2MjY3ZjE5IiwidHlwZSI6ImFjY2VzcyIsInN1YiI6eyJ1c2VyX2lkIjoxLCJuYW1lIjoiQWxiZXJ0byIsImVtYWlsIjoiYSIsIm1pbmVjcmFmdF91c2VybmFtZSI6Im1pY2hhZWwiLCJsaWtlcyI6MSwibWVzc2FnZXMiOjEzLCJxdWVzdGlvbnMiOjAsImFkbWluIjpmYWxzZSwicm9sZSI6Ik1lbWJlciIsImNyZWF0ZWRfb24iOiIyMDIzLTAzLTA1In0sIm5iZiI6MTY3ODU0MzM1MSwiZXhwIjoxNjgwOTYyNTUxfQ._ByBUGrf26va7mDigggxM7BgJ8oQCDZed0JJkSA2VUE")
+
   return (
     <div className="justify-around flex w-screen bg-[#242a33]">
       {
@@ -112,21 +114,23 @@ export const Home = () => {
                     <div style={{borderRadius: 8, fontFamily: 'League Spartan', height: 64 }} className='pl-10 pr-10 font-bold flex items-center text-[#ffffff] bg-[#2a313b]'>
                       <div>
                         <h2>{iterationNews.title}</h2>
-                        <h2 className='text-[gray]'>{iterationNews.created_on.substring(0, 16)}</h2>
+                        <h2 className='text-[#596270]'>{iterationNews.created_on.substring(0, 16)}</h2>
                       </div>
                     </div>
-                    <div style={{borderRadius: 8}} className='mt-4 flex p-10 bg-[#2a313b]'>
+                    <div style={{borderRadius: 8}} className='bodyhome mt-4 flex p-10 bg-[#2a313b]'>
                       <div>
-                        <div style={{ width: 114 }}>
-                          <Avatar
-                            size={40}
-                            name={iterationNews.owner.minecraft_username}
-                            variant="beam"
-                            colors={["#9d2b88", "#9d2b87", "#d880d9", "#d164bd", "#d173bf"]}
-                          />
+                        <div className='justify-around flex'>
+                          <div style={{ width: 114 }}>
+                            <Avatar
+                              size={40}
+                              name={iterationNews.owner.minecraft_username}
+                              variant="beam"
+                              colors={["#9d2b88", "#9d2b87", "#d880d9", "#d164bd", "#d173bf"]}
+                            />
+                          </div>
                         </div>
                         <div className='justify-around items-center flex'><h2 style={{ fontFamily: 'League Spartan' }} className='mt-4 text-xl text-[#ffffff]'>{iterationNews.owner.minecraft_username}</h2></div>
-                        <div className='mt-4 text-xl items-center justify-around flex' style={{ borderRadius: 5, backgroundColor: stafferColor(iterationNews.owner.role) }}><h2 style={{ fontSize: 14, fontWeight: 600, fontFamily: 'League Spartan' }} className='text-[#ffffff]'>{iterationNews.owner.role}</h2></div>
+                        <div className=' mt-4 text-xl items-center justify-around flex' style={{borderRadius: 5, backgroundColor: stafferColor(iterationNews.owner.role) }}><h2 style={{ fontSize: 14, fontWeight: 600, fontFamily: 'League Spartan' }} className='text-[#ffffff]'>{iterationNews.owner.role}</h2></div>
                       </div>
                       <div className='p-10'>
                         <h4 className='text-[#ffffff]' style={{ fontSize: 16, fontFamily: 'League Spartan' }}>{iterationNews.body}</h4>
@@ -185,7 +189,7 @@ export const Home = () => {
                             </div>
                             <div className='ml-4'>
                               <h2 style={{ fontFamily: 'League Spartan' }} className='text-sm text-[#ffffff]'>@{recentUser.minecraft_username}</h2>
-                              <h2 style={{ fontFamily: 'League Spartan' }} className='text-sm text-[gray]'>{recentUser.name}</h2>
+                              <h2 style={{ fontFamily: 'League Spartan' }} className='text-sm text-[#596270]'>{recentUser.name}</h2>
                             </div>
                           </div>
                           {
