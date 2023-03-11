@@ -7,6 +7,7 @@ import { IonIcon } from 'react-ion-icon';
 import { useParams } from 'react-router-dom';
 import { SpinnerCircular } from 'spinners-react';
 import { BASE_URL } from '../utils';
+import BasicMenu from './BasicMenu';
 import './styles/index.css'
 import './styles/style.css'
 
@@ -111,7 +112,7 @@ export const Question = () => {
                     <h2 className='text-[#596270]'>{question.owner.minecraft_username} - {question.created_on.substring(0, 16)}</h2>
                   </div>
                   <div>
-                    <div></div>
+                    <BasicMenu/>
                   </div>
                 </div>
                 <div style={{ borderRadius: 8 }} className='bodyhome mt-4 flex p-10 bg-[#2a313b]'>
