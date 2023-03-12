@@ -3,14 +3,20 @@ import { useEffect, useState } from "react";
 import { IonIcon } from "react-ion-icon";
 import { useNavigate } from "react-router-dom";
 import { BASE_URL } from "../utils";
+import { Loading } from "./Loading";
 
 export const Forum = () => {
 
   const [categories, setCategories] = useState([])
 
+  const [isLoading, setIsLoading] = useState(true)
+
   const getCategories = async () => {
     await axios.get(BASE_URL + '/category/get')
-    .then(response => setCategories(response.data))
+    .then(response => {
+      setCategories(response.data)
+      setIsLoading(false)
+    })
     .catch(error => console.log(error))
   }
 
@@ -22,7 +28,11 @@ export const Forum = () => {
 
   return(
     <div className="justify-around flex w-screen bg-[#242a33]">
-      <div className='justify-around bodyhome flex'>
+      {
+        isLoading ? (
+          <Loading/>
+        ):(
+          <div className='justify-around bodyhome flex'>
         <div>
           <div style={{maxWidth: 1040 }} className='pl-8 mt-14 pr-14'>
             <div style={{borderRadius: 10, fontFamily: 'League Spartan', height: 64 }} className='pl-10 pr-10 font-bold flex items-center text-[#ffffff] bg-[#2a313b]'>
@@ -32,7 +42,7 @@ export const Forum = () => {
             <div className='mt-4 p-10 bg-[#2a313b]'>
             {
               categories.map(category => (
-                <div onClick={(e) => navigate("/forum/" + category.category_id)} style={{borderBottomWidth: 1, borderBottomColor: '#384554', height: 94}} className="justify-between items-center flex">
+                <div onClick={(e) => navigate("/forum/" + category.category_id)} style={{ cursor: 'pointer', borderBottomWidth: 1, borderBottomColor: '#384554', height: 94}} className="justify-between items-center flex">
                   <div className="pr-4 pl-4 flex">
                     <div className="text-[#596270] text-2xl"><IonIcon name="chatbox"/></div>
                     <h2 style={{fontSize: 18, fontWeight: 600, fontFamily: 'League Spartan' }} className='text-xl ml-4 text-[#ffffff]'>{category.name}</h2>
@@ -63,6 +73,8 @@ export const Forum = () => {
           </div>
         </div>
       </div>
+        )
+      }
     </div>
   );
 }

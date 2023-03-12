@@ -1,4 +1,4 @@
-import { Alert, Snackbar } from '@mui/material';
+import { Alert, Modal, Snackbar } from '@mui/material';
 import axios from 'axios';
 import Avatar from 'boring-avatars'
 import { useEffect, useState } from 'react'
@@ -7,6 +7,10 @@ import { SpinnerCircular } from 'spinners-react';
 import { BASE_URL } from '../utils';
 import './styles/index.css'
 import './styles/style.css'
+import jwt from 'jwt-decode'
+import { Box } from '@mui/system';
+import { Textarea } from '@mui/joy';
+import { Loading } from './Loading';
 
 export const Home = () => {
 
@@ -22,8 +26,20 @@ export const Home = () => {
 
   const [popupStatus, setPopupStatus] = useState(false)
 
+  const [modalStatus, setModalStatus] = useState(false)
+
+  const [news, setNews] = useState({
+    'name': '',
+    'body': ''
+  })
+
+  const handleNews = (e) => {
+    const newNews = { ...news }
+    newNews[e.target.name] = e.target.value
+    setNews(newNews)
+  }
+
   const getStaffers = async () => {
-    setIsLoading(true)
     await axios.get(BASE_URL + '/user/get/staffers')
       .then(response => { setStaffers(response.data); getRecentUsers() })
       .catch(error => console.log(error))
@@ -41,19 +57,19 @@ export const Home = () => {
         return 'red'
         break;
       case 'Admin':
-        return 'purple'
+        return '#ad2cd1'
         break;
       case 'Moderatore':
-        return 'yellow'
+        return '#ded123'
         break;
       case 'Developer':
-        return 'blue'
+        return '#4d75e3'
         break;
       case 'Pluginner':
-        return 'purple'
+        return '#b351cf'
         break;
       case 'Builder':
-        return 'red'
+        return '#eb4c46'
         break;
       case 'Helper SS':
         return 'orange'
@@ -69,9 +85,6 @@ export const Home = () => {
 
   useEffect(() => {
     getStaffers()
-    getRecentUsers()
-    getServerStats()
-    getNewses()
   }, [])
 
 
@@ -87,156 +100,217 @@ export const Home = () => {
     axios.get(BASE_URL + '/news/get')
       .then(response => {
         setNewses(response.data)
+        setIsLoading(false)
       })
       .catch(error => console.log(error))
-    setIsLoading(false)
   }
 
-  window.localStorage.setItem("token", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTY3ODU0MzM1MSwianRpIjoiN2M2YzQwMGQtMjAzZS00NjA1LTg2MzgtNzIzNmE2MjY3ZjE5IiwidHlwZSI6ImFjY2VzcyIsInN1YiI6eyJ1c2VyX2lkIjoxLCJuYW1lIjoiQWxiZXJ0byIsImVtYWlsIjoiYSIsIm1pbmVjcmFmdF91c2VybmFtZSI6Im1pY2hhZWwiLCJsaWtlcyI6MSwibWVzc2FnZXMiOjEzLCJxdWVzdGlvbnMiOjAsImFkbWluIjpmYWxzZSwicm9sZSI6Ik1lbWJlciIsImNyZWF0ZWRfb24iOiIyMDIzLTAzLTA1In0sIm5iZiI6MTY3ODU0MzM1MSwiZXhwIjoxNjgwOTYyNTUxfQ._ByBUGrf26va7mDigggxM7BgJ8oQCDZed0JJkSA2VUE")
+  const addNews = () => {
+    axios.post(BASE_URL + '/news/add', {
+      'title': news.name,
+      'owner_id': jwt(window.localStorage.getItem("token")).sub.user_id,
+      'body': news.body
+    })
+      .then(response => {
+        getNewses()
+        setModalStatus(false)
+      })
+      .catch(error => console.log(error))
+  }
+
+  window.localStorage.setItem("token", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTY3ODU3MTYzMCwianRpIjoiNWIyZjAyYTQtM2UzOC00OGE0LWE4NDAtYTc3Y2M5YTk5ZmUxIiwidHlwZSI6ImFjY2VzcyIsInN1YiI6eyJ1c2VyX2lkIjoxLCJuYW1lIjoiQWxiZXJ0byIsImVtYWlsIjoiYSIsIm1pbmVjcmFmdF91c2VybmFtZSI6Im1pY2hhZWwiLCJsaWtlcyI6MTEsIm1lc3NhZ2VzIjoxMywicXVlc3Rpb25zIjowLCJhZG1pbiI6dHJ1ZSwicm9sZSI6IkRldmVsb3BlciIsImNyZWF0ZWRfb24iOiIyMDIzLTAzLTA1In0sIm5iZiI6MTY3ODU3MTYzMCwiZXhwIjoxNjgwOTkwODMwfQ.Tbf5TYveuVrV9vGEbFrtG5xzTVrvEE_waeGrRgo_11A")
 
   return (
     <div className="justify-around flex w-screen bg-[#242a33]">
       {
         isLoading ? (
-          <SpinnerCircular />
+          <Loading />
         ) : (
-          <div className='justify-around bodyhome flex'>
-            <div>
-              <div style={{maxWidth: 1040 }} className='pl-8 mt-14 pr-14'>
-                <div style={{borderRadius: 10, fontFamily: 'League Spartan', height: 64 }} className='pl-10 pr-10 font-bold flex items-center text-[#ffffff] bg-[#2a313b]'>
-                  <IonIcon style={{color: '#9d2b88', fontSize: 18}} name="newspaper"/>
-                  <h2 className='ml-4 text-xl'>News</h2>
+          <>
+            <Modal
+              open={modalStatus}
+              onClose={() => setModalStatus(false)}
+              aria-labelledby="parent-modal-title"
+              aria-describedby="parent-modal-description"
+            >
+              <Box sx={{ justifyContent: 'space-around', display: 'flex', borderRadius: 2, backgroundColor: '#242a33', position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', width: 400, boxShadow: 24, pt: 2, px: 4, pb: 3, width: 400 }}>
+                <div>
+                  <div className='mt-4'>
+                    <h2 style={{ fontFamily: 'League Spartan' }} className='text-[#ffffff]'>Nome della news</h2>
+                    <input onChange={(e) => handleNews(e)} name='name' placeholder='  Scrivi il titolo' style={{ borderRadius: 10, height: 34, color: 'white', border: 'none', outline: 'none', backgroundColor: '#2a313b' }} className='bg-[gray]' type="text" />
+                  </div>
+                  <div className='mt-4'>
+                    <h2 style={{ fontFamily: 'League Spartan' }} className='text-[#ffffff]'>Corpo della news</h2>
+                    <Textarea
+                      placeholder="Scrivi il corpo"
+                      disabled={false}
+                      value={news.body}
+                      minRows={2}
+                      name="body"
+                      onChange={(e) => handleNews(e)}
+                      maxRows={4}
+                      style={{ color: 'white', border: 'none', outline: 'none', backgroundColor: '#2a313b' }}
+                    />
+                    <div className='mt-14 justify-around flex'>
+                      {
+                        news.name == "" || news.body.length < 84 ? (
+                          <button style={{ color: 'white', fontFamily: 'League Spartan', borderRadius: 5 }} className='opacity-40 mt-4 p-3 bg-[#d880d9]'>Crea news</button>
+                        ) : (
+                          <button onClick={(e) => addNews()} style={{ color: 'white', fontFamily: 'League Spartan', borderRadius: 5 }} className='mt-4 p-3 bg-[#d880d9]'>Crea news</button>
+                        )
+                      }
+                    </div>
+                  </div>
                 </div>
-              </div>
-              {
-                newses.map(iterationNews => (
-                  <div style={{ maxWidth: 1040 }} className='pl-8 mt-10 pr-14'>
-                    <div style={{borderRadius: 8, fontFamily: 'League Spartan', height: 64 }} className='pl-10 pr-10 font-bold flex items-center text-[#ffffff] bg-[#2a313b]'>
-                      <div>
-                        <h2>{iterationNews.title}</h2>
-                        <h2 className='text-[#596270]'>{iterationNews.created_on.substring(0, 16)}</h2>
-                      </div>
-                    </div>
-                    <div style={{borderRadius: 8}} className='bodyhome mt-4 flex p-10 bg-[#2a313b]'>
-                      <div>
-                        <div className='justify-around flex'>
-                          <div style={{ width: 114 }}>
-                            <Avatar
-                              size={40}
-                              name={iterationNews.owner.minecraft_username}
-                              variant="beam"
-                              colors={["#9d2b88", "#9d2b87", "#d880d9", "#d164bd", "#d173bf"]}
-                            />
-                          </div>
-                        </div>
-                        <div className='justify-around items-center flex'><h2 style={{ fontFamily: 'League Spartan' }} className='mt-4 text-xl text-[#ffffff]'>{iterationNews.owner.minecraft_username}</h2></div>
-                        <div className=' mt-4 text-xl items-center justify-around flex' style={{borderRadius: 5, backgroundColor: stafferColor(iterationNews.owner.role) }}><h2 style={{ fontSize: 14, fontWeight: 600, fontFamily: 'League Spartan' }} className='text-[#ffffff]'>{iterationNews.owner.role}</h2></div>
-                      </div>
-                      <div className='p-10'>
-                        <h4 className='text-[#ffffff]' style={{ fontSize: 16, fontFamily: 'League Spartan' }}>{iterationNews.body}</h4>
-                      </div>
-                    </div>
-                  </div>
-                ))
-              }
-              <div style={{ maxWidth: 1040 }} className='pl-8 mt-14 pr-14'>
-                <h2>ok</h2>
-              </div>
-            </div>
-            <div className='justify-around flex'>
-              <div>
-                <div style={{ minHeight: 154, borderRadius: 10, width: 284 }} className='mt-14 h-auto bg-[#2a313b]'>
-                  <div className='p-5 items-center justify-around flex'>
-                    <h2 style={{ fontFamily: 'League Spartan' }} className='font-bold text-[#ffffff]'>Staff</h2>
-                  </div>
+              </Box>
+            </Modal>
+            {
+              isLoading ? (
+                <SpinnerCircular />
+              ) : (
+                <div className='justify-around bodyhome flex'>
                   <div>
+                    <div style={{ maxWidth: 1040 }} className='pl-8 mt-14 pr-14'>
+                      <div style={{ borderRadius: 10, fontFamily: 'League Spartan', height: 64 }} className='pl-10 pr-10 font-bold flex items-center text-[#ffffff] bg-[#2a313b]'>
+                        <IonIcon style={{ color: '#9d2b88', fontSize: 18 }} name="newspaper" />
+                        <h2 className='ml-4 text-xl'>News</h2>
+                      </div>
+                    </div>
                     {
-                      staffers.map(staffer => (
-                        <div style={{ borderTopColor: '#384554', borderTopWidth: 1, height: 74 }} className='items-center flex'>
-                          <div className='ml-4' style={{ width: 38 }}>
-                            <Avatar
-                              size={40}
-                              name={staffer.minecraft_username}
-                              variant="beam"
-                              colors={["#9d2b88", "#9d2b87", "#d880d9", "#d164bd", "#d173bf"]}
-                            />
+                      newses.map(iterationNews => (
+                        <div style={{ maxWidth: 1040 }} className='pl-8 mt-10 pr-14'>
+                          <div style={{ borderRadius: 8, fontFamily: 'League Spartan', height: 64 }} className='pl-10 pr-10 font-bold flex items-center text-[#ffffff] bg-[#2a313b]'>
+                            <div>
+                              <h2>{iterationNews.title}</h2>
+                              <h2 className='text-[#596270]'>{iterationNews.created_on.substring(0, 16)}</h2>
+                            </div>
                           </div>
-                          <div className='ml-4'>
-                            <h2 style={{ fontFamily: 'League Spartan' }} className='text-sm text-[#ffffff]'>@{staffer.minecraft_username}</h2>
-                            <div className='text-sm items-center justify-around flex' style={{ borderRadius: 5, backgroundColor: stafferColor(staffer.role) }}><h2 style={{ fontSize: 10, fontWeight: 600, fontFamily: 'League Spartan' }} className='text-[#ffffff]'>{staffer.role.toUpperCase()}</h2></div>
+                          <div style={{ borderRadius: 8 }} className='bodyhome mt-4 flex p-10 bg-[#2a313b]'>
+                            <div>
+                              <div className='justify-around flex'>
+                                <div style={{ width: 114 }}>
+                                  <Avatar
+                                    size={40}
+                                    name={iterationNews.owner.minecraft_username}
+                                    variant="beam"
+                                    colors={["#9d2b88", "#9d2b87", "#d880d9", "#d164bd", "#d173bf"]}
+                                  />
+                                </div>
+                              </div>
+                              <div className='justify-around items-center flex'><h2 style={{ fontFamily: 'League Spartan' }} className='mt-4 text-xl text-[#ffffff]'>{iterationNews.owner.minecraft_username}</h2></div>
+                              <div className=' mt-4 text-xl items-center justify-around flex' style={{ borderRadius: 5, backgroundColor: stafferColor(iterationNews.owner.role) }}><h2 style={{ fontSize: 14, fontWeight: 600, fontFamily: 'League Spartan' }} className='text-[#ffffff]'>{iterationNews.owner.role}</h2></div>
+                            </div>
+                            <div className='p-10'>
+                              <h4 className='text-[#ffffff]' style={{ fontSize: 16, fontFamily: 'League Spartan' }}>{iterationNews.body}</h4>
+                            </div>
                           </div>
                         </div>
                       ))
                     }
-                  </div>
-                </div>
-                <div style={{ minHeight: 154, borderRadius: 10, width: 284 }} className='mt-8 h-auto bg-[#2a313b]'>
-                  <div className='p-5 items-center justify-around flex'>
-                    <h2 style={{ fontFamily: 'League Spartan' }} className='font-bold text-[#ffffff]'>Utenti più attivi</h2>
-                  </div>
-                  <div>
                     {
-                      recentUsers.map((recentUser, iteration) => (
-                        <div style={{ borderTopColor: '#384554', borderTopWidth: 1, height: 74 }} className='justify-between items-center flex'>
-                          <div className='flex'>
-                            <div className='ml-4' style={{ width: 38 }}>
-                              <Avatar
-                                size={40}
-                                name={recentUser.minecraft_username}
-                                variant="beam"
-                                colors={["#9d2b88", "#9d2b87", "#d880d9", "#d164bd", "#d173bf"]}
-                              />
-                            </div>
-                            <div className='ml-4'>
-                              <h2 style={{ fontFamily: 'League Spartan' }} className='text-sm text-[#ffffff]'>@{recentUser.minecraft_username}</h2>
-                              <h2 style={{ fontFamily: 'League Spartan' }} className='text-sm text-[#596270]'>{recentUser.name}</h2>
-                            </div>
-                          </div>
-                          {
-                            iteration == 0 &&
-                            <div style={{ width: 40 }}>
-                              <span className='font-bold text-[#f5c269]'>1°</span>
-                            </div>
-                          }
-                          {
-                            iteration == 1 &&
-                            <div style={{ width: 40 }}>
-                              <span className='font-bold text-[#a6a6a6]'>2°</span>
-                            </div>
-                          }
-                          {
-                            iteration == 2 &&
-                            <div style={{ width: 40 }}>
-                              <span className='font-bold text-[#78554a]'>3°</span>
-                            </div>
-                          }
-                        </div>
-                      ))
+                      jwt(window.localStorage.getItem("token")).sub.admin &&
+                      <div style={{ maxWidth: 1040 }} className='justify-around flex pl-8 mt-14 pr-14'>
+                        <div onClick={(e) => setModalStatus(true)} style={{ fontSize: 34 }}><IonIcon name='add-outline' /></div>
+                      </div>
                     }
                   </div>
-                </div>
-                <div style={{ minHeight: 194, borderRadius: 10, width: 284 }} className='mt-8 h-auto bg-[#2a313b]'>
-                  <div className='p-5 items-center justify-around flex'>
-                    <h2 style={{ fontFamily: 'League Spartan' }} className='font-bold text-[#ffffff]'>Attività del forum</h2>
+                  <div className='justify-around flex'>
+                    <div>
+                      <div style={{ minHeight: 154, borderRadius: 10, width: 284 }} className='mt-14 h-auto bg-[#2a313b]'>
+                        <div className='p-5 items-center justify-around flex'>
+                          <h2 style={{ fontFamily: 'League Spartan' }} className='font-bold text-[#ffffff]'>Staff</h2>
+                        </div>
+                        <div>
+                          {
+                            staffers.map(staffer => (
+                              <div style={{ borderTopColor: '#384554', borderTopWidth: 1, height: 74 }} className='items-center flex'>
+                                <div className='ml-4' style={{ width: 38 }}>
+                                  <Avatar
+                                    size={40}
+                                    name={staffer.minecraft_username}
+                                    variant="beam"
+                                    colors={["#9d2b88", "#9d2b87", "#d880d9", "#d164bd", "#d173bf"]}
+                                  />
+                                </div>
+                                <div className='ml-4'>
+                                  <h2 style={{ fontFamily: 'League Spartan' }} className='text-sm text-[#ffffff]'>@{staffer.minecraft_username}</h2>
+                                  <div className='pr-1 pl-1 text-sm items-center justify-around flex' style={{ borderRadius: 5, backgroundColor: stafferColor(staffer.role) }}><h2 style={{ fontSize: 10, fontWeight: 600, fontFamily: 'League Spartan' }} className='text-[#ffffff]'>{staffer.role.toUpperCase()}</h2></div>
+                                </div>
+                              </div>
+                            ))
+                          }
+                        </div>
+                      </div>
+                      <div style={{ minHeight: 154, borderRadius: 10, width: 284 }} className='mt-8 h-auto bg-[#2a313b]'>
+                        <div className='p-5 items-center justify-around flex'>
+                          <h2 style={{ fontFamily: 'League Spartan' }} className='font-bold text-[#ffffff]'>Utenti più attivi</h2>
+                        </div>
+                        <div>
+                          {
+                            recentUsers.map((recentUser, iteration) => (
+                              <div style={{ borderTopColor: '#384554', borderTopWidth: 1, height: 74 }} className='justify-between items-center flex'>
+                                <div className='flex'>
+                                  <div className='ml-4' style={{ width: 38 }}>
+                                    <Avatar
+                                      size={40}
+                                      name={recentUser.minecraft_username}
+                                      variant="beam"
+                                      colors={["#9d2b88", "#9d2b87", "#d880d9", "#d164bd", "#d173bf"]}
+                                    />
+                                  </div>
+                                  <div className='ml-4'>
+                                    <h2 style={{ fontFamily: 'League Spartan' }} className='text-sm text-[#ffffff]'>@{recentUser.minecraft_username}</h2>
+                                    <h2 style={{ fontFamily: 'League Spartan' }} className='text-sm text-[#596270]'>{recentUser.name}</h2>
+                                  </div>
+                                </div>
+                                {
+                                  iteration == 0 &&
+                                  <div style={{ width: 40 }}>
+                                    <span className='font-bold text-[#f5c269]'>1°</span>
+                                  </div>
+                                }
+                                {
+                                  iteration == 1 &&
+                                  <div style={{ width: 40 }}>
+                                    <span className='font-bold text-[#a6a6a6]'>2°</span>
+                                  </div>
+                                }
+                                {
+                                  iteration == 2 &&
+                                  <div style={{ width: 40 }}>
+                                    <span className='font-bold text-[#78554a]'>3°</span>
+                                  </div>
+                                }
+                              </div>
+                            ))
+                          }
+                        </div>
+                      </div>
+                      <div style={{ minHeight: 194, borderRadius: 10, width: 284 }} className='mt-8 h-auto bg-[#2a313b]'>
+                        <div className='p-5 items-center justify-around flex'>
+                          <h2 style={{ fontFamily: 'League Spartan' }} className='font-bold text-[#ffffff]'>Attività del forum</h2>
+                        </div>
+                        <div style={{ borderTopColor: '#384554', borderTopWidth: 1 }}>
+                          <div style={{ width: 284 }} className='mt-3 justify-between flex'>
+                            <div style={{ height: 34, width: 154 }} className='ml-4 items-center flex'><span style={{ fontFamily: 'League Spartan' }} className='text-[gray] font-bold'>Utenti registrati:</span></div>
+                            <div style={{ height: 34, width: 74 }} className='items-center flex'><span style={{ fontFamily: 'League Spartan' }} className='text-[#ffffff] font-bold'>{serverStats.registered_users}</span></div>
+                          </div>
+                          <div style={{ width: 284 }} className='justify-between flex'>
+                            <div style={{ height: 34, width: 154 }} className='ml-4 items-center flex'><span style={{ fontFamily: 'League Spartan' }} className='text-[gray] font-bold'>Discussioni:</span></div>
+                            <div style={{ height: 34, width: 74 }} className='items-center flex'><span style={{ fontFamily: 'League Spartan' }} className='text-[#ffffff] font-bold'>{serverStats.questions}</span></div>
+                          </div>
+                          <div style={{ width: 284 }} className='justify-between flex'>
+                            <div style={{ height: 34, width: 154 }} className='ml-4 items-center flex'><span style={{ fontFamily: 'League Spartan' }} className='text-[gray] font-bold'>Messaggi:</span></div>
+                            <div style={{ height: 34, width: 74 }} className='items-center flex'><span style={{ fontFamily: 'League Spartan' }} className='text-[#ffffff] font-bold'>{serverStats.messages}</span></div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
                   </div>
-                  <div style={{ borderTopColor: '#384554', borderTopWidth: 1 }}>
-                    <div style={{ width: 284 }} className='mt-3 justify-between flex'>
-                      <div style={{ height: 34, width: 154 }} className='ml-4 items-center flex'><span style={{ fontFamily: 'League Spartan' }} className='text-[gray] font-bold'>Utenti registrati:</span></div>
-                      <div style={{ height: 34, width: 74 }} className='items-center flex'><span style={{ fontFamily: 'League Spartan' }} className='text-[#ffffff] font-bold'>{serverStats.registered_users}</span></div>
-                    </div>
-                    <div style={{ width: 284 }} className='justify-between flex'>
-                      <div style={{ height: 34, width: 154 }} className='ml-4 items-center flex'><span style={{ fontFamily: 'League Spartan' }} className='text-[gray] font-bold'>Discussioni:</span></div>
-                      <div style={{ height: 34, width: 74 }} className='items-center flex'><span style={{ fontFamily: 'League Spartan' }} className='text-[#ffffff] font-bold'>{serverStats.questions}</span></div>
-                    </div>
-                    <div style={{ width: 284 }} className='justify-between flex'>
-                      <div style={{ height: 34, width: 154 }} className='ml-4 items-center flex'><span style={{ fontFamily: 'League Spartan' }} className='text-[gray] font-bold'>Messaggi:</span></div>
-                      <div style={{ height: 34, width: 74 }} className='items-center flex'><span style={{ fontFamily: 'League Spartan' }} className='text-[#ffffff] font-bold'>{serverStats.messages}</span></div>
-                    </div>
-                  </div>
                 </div>
-              </div>
-            </div>
-          </div>
+              )
+            }
+          </>
         )
       }
     </div>

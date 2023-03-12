@@ -1,3 +1,4 @@
+import { Textarea } from '@mui/joy';
 import { Alert, Snackbar } from '@mui/material';
 import axios from 'axios';
 import Avatar from 'boring-avatars'
@@ -8,6 +9,7 @@ import { useParams } from 'react-router-dom';
 import { SpinnerCircular } from 'spinners-react';
 import { BASE_URL } from '../utils';
 import BasicMenu from './BasicMenu';
+import { Loading } from './Loading';
 import './styles/index.css'
 import './styles/style.css'
 
@@ -18,6 +20,8 @@ export const Question = () => {
   const [question, setQuestion] = useState({})
 
   const [isLoading, setIsLoading] = useState(true)
+
+  const [message, setMessage] = useState("")
 
   const questionId = useParams().question_id
 
@@ -69,19 +73,19 @@ export const Question = () => {
         return 'red'
         break;
       case 'Admin':
-        return 'purple'
+        return '#ad2cd1'
         break;
       case 'Moderatore':
-        return 'yellow'
+        return '#ded123'
         break;
       case 'Developer':
-        return 'blue'
+        return '#4d75e3'
         break;
       case 'Pluginner':
-        return 'purple'
+        return '#b351cf'
         break;
       case 'Builder':
-        return 'red'
+        return '#eb4c46'
         break;
       case 'Helper SS':
         return 'orange'
@@ -95,24 +99,36 @@ export const Question = () => {
     }
   }
 
-  window.localStorage.setItem("token", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTY3ODU0MzM1MSwianRpIjoiN2M2YzQwMGQtMjAzZS00NjA1LTg2MzgtNzIzNmE2MjY3ZjE5IiwidHlwZSI6ImFjY2VzcyIsInN1YiI6eyJ1c2VyX2lkIjoxLCJuYW1lIjoiQWxiZXJ0byIsImVtYWlsIjoiYSIsIm1pbmVjcmFmdF91c2VybmFtZSI6Im1pY2hhZWwiLCJsaWtlcyI6MSwibWVzc2FnZXMiOjEzLCJxdWVzdGlvbnMiOjAsImFkbWluIjpmYWxzZSwicm9sZSI6Ik1lbWJlciIsImNyZWF0ZWRfb24iOiIyMDIzLTAzLTA1In0sIm5iZiI6MTY3ODU0MzM1MSwiZXhwIjoxNjgwOTYyNTUxfQ._ByBUGrf26va7mDigggxM7BgJ8oQCDZed0JJkSA2VUE")
+  const addMessage = async () => {
+    await axios.post(BASE_URL + '/message/add', {
+      'question_id': questionId,
+      'owner_id': jwt(window.localStorage.getItem("token")).sub.user_id,
+      'body': message
+    })
+      .then(response => {
+        getMessages()
+      })
+      .catch(error => console.log(error))
+  }
+
+  window.localStorage.setItem("token", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTY3ODU2NDI4NSwianRpIjoiM2I0ZmQ4NzYtM2Y3Yy00MzBiLWE3NTEtNTViYzdlZGM0MjBhIiwidHlwZSI6ImFjY2VzcyIsInN1YiI6eyJ1c2VyX2lkIjoxLCJuYW1lIjoiQWxiZXJ0byIsImVtYWlsIjoiYSIsIm1pbmVjcmFmdF91c2VybmFtZSI6Im1pY2hhZWwiLCJsaWtlcyI6MiwibWVzc2FnZXMiOjEzLCJxdWVzdGlvbnMiOjAsImFkbWluIjp0cnVlLCJyb2xlIjoiRGV2ZWxvcGVyIiwiY3JlYXRlZF9vbiI6IjIwMjMtMDMtMDUifSwibmJmIjoxNjc4NTY0Mjg1LCJleHAiOjE2ODA5ODM0ODV9.YhIRx64l0sVBkbT440QhErMBpAG_CV2jeWpIj0s1o1A")
 
   return (
     <div className="justify-around flex w-screen bg-[#242a33]">
-      <div className='justify-around bodyhome flex'>
-        {
-          isLoading ? (
-            <div></div>
-          ) : (
+      {
+        isLoading ? (
+          <Loading />
+        ) : (
+          <div className='justify-around bodyhome flex'>
             <div>
-              <div style={{maxWidth: 1040 }} className='mb-14 pl-8 mt-10 pr-14'>
-                <div style={{ borderRadius: 8, fontFamily: 'League Spartan', height: 64 }} className='pl-10 pr-10 font-bold flex items-center text-[#ffffff] bg-[#2a313b]'>
+              <div style={{ maxWidth: 1040 }} className='mb-14 pl-8 mt-10 pr-14'>
+                <div style={{ borderRadius: 8, fontFamily: 'League Spartan', height: 64 }} className='justify-between pl-10 pr-10 font-bold flex items-center text-[#ffffff] bg-[#2a313b]'>
                   <div>
                     <h2>{question.name}</h2>
                     <h2 className='text-[#596270]'>{question.owner.minecraft_username} - {question.created_on.substring(0, 16)}</h2>
                   </div>
                   <div>
-                    <BasicMenu/>
+                    <BasicMenu questionId={questionId} />
                   </div>
                 </div>
                 <div style={{ borderRadius: 8 }} className='bodyhome mt-4 flex p-10 bg-[#2a313b]'>
@@ -162,13 +178,13 @@ export const Question = () => {
                           {
                             message.likeable ? (
                               <div>
-                                <div onClick={(e) => addLike(message.message_id)} className='text-[#d880d9] text-3xl'><IonIcon name='heart'/></div>
-                                <h2 className='font-bold text-[#ffffff] text-xl' style={{fontFamily: 'League Spartan', textAlign: 'center'}}>{message.likes}</h2>
+                                <div style={{ cursor: 'pointer' }} onClick={(e) => addLike(message.message_id)} className='text-[#d880d9] text-3xl'><IonIcon name='heart' /></div>
+                                <h2 className='font-bold text-[#ffffff] text-xl' style={{ fontFamily: 'League Spartan', textAlign: 'center' }}>{message.likes}</h2>
                               </div>
-                            ):(
+                            ) : (
                               <div>
-                                <div onClick={(e) => removeLike(message.message_id)} className='text-[#d880d9] text-3xl'><IonIcon name='heart-dislike'/></div>
-                                <h2 className='font-bold text-[#ffffff] text-xl' style={{fontFamily: 'League Spartan', textAlign: 'center'}}>{message.likes}</h2>
+                                <div style={{ cursor: 'pointer' }} onClick={(e) => removeLike(message.message_id)} className='text-[#d880d9] text-3xl'><IonIcon name='heart-dislike' /></div>
+                                <h2 className='font-bold text-[#ffffff] text-xl' style={{ fontFamily: 'League Spartan', textAlign: 'center' }}>{message.likes}</h2>
                               </div>
                             )
                           }
@@ -178,13 +194,47 @@ export const Question = () => {
                   </div>
                 ))
               }
-              <div style={{ maxWidth: 1040 }} className='pl-8 mt-14 pr-14'>
-                <h2>ok</h2>
+              <div style={{ maxWidth: 1040 }} className='pl-8 mt-24 pr-14'>
+                {
+                  question.closed ? (
+                    <>
+                      <Textarea
+                        placeholder="Non puoi inviare ulteriori messaggi in questa discussione poichè è chiusa"
+                        disabled={true}
+                        value={message}
+                        minRows={2}
+                        onChange={(e) => setMessage(e.target.value)}
+                        maxRows={4}
+                        style={{ color: 'white', border: 'none', outline: 'none', backgroundColor: '#2a313b' }}
+                      />
+                      <button style={{ color: 'white', fontFamily: 'League Spartan', borderRadius: 5 }} className='opacity-40 mt-4 p-3 bg-[#d880d9]'>Invia messaggio</button>
+                    </>
+                  ) : (
+                    <>
+                      <Textarea
+                        placeholder="Scrivi messaggio"
+                        disabled={false}
+                        value={message}
+                        minRows={2}
+                        onChange={(e) => setMessage(e.target.value)}
+                        maxRows={4}
+                        style={{ color: 'white', border: 'none', outline: 'none', backgroundColor: '#2a313b' }}
+                      />
+                      {
+                        message.length < 54 ? (
+                          <button style={{ color: 'white', fontFamily: 'League Spartan', borderRadius: 5 }} className='opacity-40 mt-4 p-3 bg-[#d880d9]'>Invia messaggio</button>
+                        ) : (
+                          <button onClick={(e) => { addMessage(); setMessage("") }} style={{ color: 'white', fontFamily: 'League Spartan', borderRadius: 5 }} className='mt-4 p-3 bg-[#d880d9]'>Invia messaggio</button>
+                        )
+                      }
+                    </>
+                  )
+                }
               </div>
             </div>
-          )
-        }
-      </div>
+          </div>
+        )
+      }
     </div>
   )
 }
