@@ -30,12 +30,12 @@ export const Admin = () => {
   }
 
   return(
-    <div className="h-screen items-center justify-around flex">
+    <div className="w-screen h-screen items-center justify-around flex">
       {
         isLoggedIn ? (
           <div></div>
         ):(
-          <div>
+          <div style={{height: 140}}>
             <input onChange={(e) => handleUserAdmin(e)} name="username" placeholder="username" type="username" />
             <input onChange={(e) => handleUserAdmin(e)} name="password" placeholder="password" type="password" />
             <button onClick={(e) => admin()}>Accedi</button>

@@ -3,7 +3,7 @@ import Avatar from "boring-avatars";
 import { useEffect, useState } from "react";
 import { IonIcon } from "react-ion-icon";
 import { useNavigate, useParams } from "react-router-dom";
-import { BASE_URL } from "../utils";
+import { BASE_URL, fixDate } from "../utils";
 import jwt from 'jwt-decode'
 import { Modal } from "@mui/material";
 import { Box } from "@mui/system";
@@ -25,9 +25,11 @@ export const Questions = () => {
     'body': ''
   })
 
+  const [category, setCategory] = useState({})
+
   const getQuestions = async () => {
     await axios.get(BASE_URL + '/question/get/' + categoryId + "/category?jwt=" + window.localStorage.getItem("token"))
-      .then(response => { setQuestions(response.data); setIsLoading(false) })
+      .then(response => { setCategory(response.data.category); setQuestions(response.data.questions); setTimeout(() => { setIsLoading(false) }, 1000); })
       .catch(error => console.log(error))
   }
 
@@ -81,13 +83,12 @@ export const Questions = () => {
               <Box sx={{ justifyContent: 'space-around', display: 'flex', borderRadius: 2, backgroundColor: '#242a33', position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', width: 400, boxShadow: 24, pt: 2, px: 4, pb: 3, width: 400 }}>
                 <div>
                   <div className='mt-4'>
-                    <h2 style={{ fontFamily: 'League Spartan' }} className='text-[#ffffff]'>Nome della news</h2>
-                    <input onChange={(e) => handleQuestion(e)} name='name' placeholder='  Titolo della discussione' style={{ borderRadius: 10, height: 34, color: 'white', border: 'none', outline: 'none', backgroundColor: '#2a313b' }} className='bg-[gray]' type="text" />
+                    <h2 style={{ fontFamily: 'League Spartan' }} className='text-[#ffffff]'>Nome della discussione</h2>
+                    <input onChange={(e) => handleQuestion(e)} name='name' style={{ borderRadius: 10, height: 34, color: 'white', border: 'none', outline: 'none', backgroundColor: '#2a313b' }} className='bg-[gray]' type="text" />
                   </div>
                   <div className='mt-4'>
-                    <h2 style={{ fontFamily: 'League Spartan' }} className='text-[#ffffff]'>Corpo della news</h2>
+                    <h2 style={{ fontFamily: 'League Spartan' }} className='text-[#ffffff]'>Corpo della discussione</h2>
                     <Textarea
-                      placeholder="Corpo della discussione"
                       disabled={false}
                       value={question.body}
                       minRows={2}
@@ -99,9 +100,9 @@ export const Questions = () => {
                     <div className='mt-14 justify-around flex'>
                       {
                         question.name == "" || question.body.length < 84 ? (
-                          <button style={{ color: 'white', fontFamily: 'League Spartan', borderRadius: 5 }} className='opacity-40 mt-4 p-3 bg-[#d880d9]'>Crea news</button>
+                          <button style={{ color: 'white', fontFamily: 'League Spartan', borderRadius: 5 }} className='opacity-40 mt-4 p-3 bg-[#d880d9]'>Crea discussione</button>
                         ) : (
-                          <button onClick={(e) => {addQuestion(); getQuestions(); setModalStatus(false)}} style={{ color: 'white', fontFamily: 'League Spartan', borderRadius: 5 }} className='mt-4 p-3 bg-[#d880d9]'>Crea news</button>
+                          <button onClick={(e) => {addQuestion(); getQuestions(); setModalStatus(false)}} style={{ color: 'white', fontFamily: 'League Spartan', borderRadius: 5 }} className='mt-4 p-3 bg-[#d880d9]'>Crea discussione</button>
                         )
                       }
                     </div>
@@ -109,12 +110,26 @@ export const Questions = () => {
                 </div>
               </Box>
             </Modal>
-            <div className='justify-around bodyhome flex'>
+            <div className='w-screen justify-around bodyhome flex'>
               <div>
                 <div style={{maxWidth: 1040 }} className='pl-8 mt-14 pr-14'>
-                  <div style={{ borderRadius: 10, fontFamily: 'League Spartan', height: 64 }} className='pl-10 pr-10 font-bold flex items-center text-[#ffffff] bg-[#2a313b]'>
-                    <IonIcon style={{ color: '#D880D9', fontSize: 18 }} name="chatbubbles" />
-                    <h2 className='ml-4 text-xl'>Discussioni</h2>
+                  <div style={{ borderRadius: 10, fontFamily: 'League Spartan', height: 64 }} className='justify-between pl-10 pr-10 font-bold flex items-center text-[#ffffff] bg-[#2a313b]'>
+                    <div className="flex">
+                      <IonIcon style={{ color: '#D880D9', fontSize: 24 }} name="chatbubbles" />
+                      <h2 className='ml-4 text-xl'>Discussioni</h2>
+                    </div>
+                    {
+                      category.editable ? (
+                        <div>
+                          <div className="items-center justify-around flex pl-8 pr-8" onClick={(e) => setModalStatus(true)} style={{ color: '#D880D9', fontSize: 24 }}><IonIcon name='add-circle' /></div>
+                        </div>
+                      ):(
+                        jwt(window.localStorage.getItem("token")).sub.admin &&
+                          <div>
+                            <div className="items-center justify-around flex pl-8 pr-8" onClick={(e) => setModalStatus(true)} style={{ color: '#D880D9', fontSize: 24 }}><IonIcon name='add-circle' /></div>
+                          </div>
+                      )
+                    }
                   </div>
                   <div style={{overflowY: 'scroll', maxHeight: 750}} className='mt-4 p-10 bg-[#2a313b]'>
                     {
@@ -153,10 +168,16 @@ export const Questions = () => {
                                   }
                                 </div>
                               </div>
-                              <h2 style={{ fontSize: 14, fontWeight: 600, fontFamily: 'League Spartan' }} className='text-xl ml-4 text-[#596270]'>{question.owner.minecraft_username} - {question.created_on}</h2>
+                              <div className="none-flex ml-2">
+                                <div className="flex pl-2 pr-2">
+                                  <h2 style={{fontSize: 14, fontFamily: 'League Spartan' }} className="font-bold text-[#596270]">Messaggi:</h2>
+                                  <h2 className="font-bold" style={{fontSize: 14, fontFamily: 'League Spartan', color: '#596270' }}>{question.messages}</h2>
+                                </div>
+                              </div>
+                              <h2 style={{ fontSize: 14, fontWeight: 600, fontFamily: 'League Spartan' }} className='text-xl ml-4 text-[#596270]'>{question.owner.minecraft_username} - {fixDate(question.created_on)}</h2>
                             </div>
                           </div>
-                          <div className="ml-8 flex">
+                          <div className="block-none ml-8 flex">
                             <div className="pl-2 pr-2" style={{ textAlign: 'center' }}>
                               <h2 style={{ fontFamily: 'League Spartan' }} className="font-bold text-[#ffffff]">Messaggi</h2>
                               <h2 className="font-bold" style={{ fontFamily: 'League Spartan', color: '#596270' }}>{question.messages}</h2>
@@ -166,12 +187,6 @@ export const Questions = () => {
                       ))
                     }
                   </div>
-                  {
-                    jwt(window.localStorage.getItem("token")).sub.admin &&
-                    <div style={{ maxWidth: 1040 }} className='justify-around flex pl-8 mt-14 pr-14'>
-                      <div onClick={(e) => setModalStatus(true)} style={{ fontSize: 34 }}><IonIcon name='add-outline' /></div>
-                    </div>
-                  }
                 </div>
               </div>
             </div>

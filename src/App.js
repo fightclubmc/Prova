@@ -11,12 +11,16 @@ import { Questions } from './components/Questions';
 import { Footer } from './components/Footer';
 import { Question } from './components/Question';
 import { Admin } from './components/Admin';
+import { Signin } from './components/Signin';
+import { Signup } from './components/Signup';
 
 function App() {
   return (
     <BrowserRouter>
       <Routes>
         <Route path='/admin' element={<><Admin/></>}/>
+        <Route path='/signup' element={<><Signup/></>}/>
+        <Route path='/signin' element={<><Signin/></>}/>
         <Route path="/forum" element={<><Hero/><Menu param={"forum"}/><Forum/><Footer/></>}/>
         <Route path='/question/:question_id' element={<><Hero/><Menu param={"forum"}/><Question/><Footer/></>}/>
         <Route path='/forum/:category_id' element={<><Hero/><Menu param={"forum"}/><Questions/><Footer/></>}/>
