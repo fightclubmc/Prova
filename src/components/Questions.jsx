@@ -57,7 +57,7 @@ export const Questions = () => {
       'question_id': questionId,
       'body': question.body
     })
-    .then(response => console.log(response.data))
+    .then(response => getQuestions())
     .catch(error => console.log(error))
   }
 

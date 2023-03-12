@@ -42,7 +42,7 @@ export const Forum = () => {
       'editable': categoryEditable,
       'private': categoryStatus
     })
-    .then(response => getCategories())
+    .then(response => {getCategories(); setModalStatus(false)})
     .catch(error => console.log(error))
   }
 
@@ -74,7 +74,7 @@ export const Forum = () => {
                     <input checked={categoryEditable} name="editable" onChange={(e) => setCategoryEditable(!categoryEditable)} type="checkbox" />
                   </div>
                   <div className='mt-4 justify-around flex'>
-                    <button onClick={(e) => addCategory()} style={{ color: 'white', fontFamily: 'League Spartan', borderRadius: 5 }} className='mt-4 p-3 bg-[#d880d9]'>Crea news</button>
+                    <button onClick={(e) => addCategory()} style={{ color: 'white', fontFamily: 'League Spartan', borderRadius: 5 }} className='mt-4 p-3 bg-[#d880d9]'>Crea categoria</button>
                   </div>
                 </div>
               </Box>

@@ -1,5 +1,5 @@
-export const BASE_URL = 'https://fightclubmc.pythonanywhere.com/api/v_1_3_5'
-//export const BASE_URL = 'http://192.168.1.10:5000/api/v_1_3_0'
+export const BASE_URL = 'https://fightclubmc.pythonanywhere.com/api/v_1_4_0'
+//export const BASE_URL = 'http://192.168.1.10:5000/api/v_1_3_5'
 
 export const fixDate = (date) => {
   let newDate = date.substring(0,10)

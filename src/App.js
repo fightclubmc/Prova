@@ -13,12 +13,16 @@ import { Question } from './components/Question';
 import { Admin } from './components/Admin';
 import { Signin } from './components/Signin';
 import { Signup } from './components/Signup';
+import { PasswordRecovery } from './components/PasswordRecovery';
+import { CreatePassword } from './components/CreatePassword';
 
 function App() {
   return (
     <BrowserRouter>
       <Routes>
         <Route path='/admin' element={<><Admin/></>}/>
+        <Route path='/create_password' element={<><CreatePassword/></>} />
+        <Route path='/password_recovery' element={<><PasswordRecovery/></>}/>
         <Route path='/signup' element={<><Signup/></>}/>
         <Route path='/signin' element={<><Signin/></>}/>
         <Route path="/forum" element={<><Hero/><Menu param={"forum"}/><Forum/><Footer/></>}/>

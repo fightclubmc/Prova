@@ -33,11 +33,6 @@ export default function BasicMenu({ questionId }) {
     setAnchorEl(null);
   };
 
-  const logout = () => {
-    window.localStorage.removeItem('token');
-    window.location.href = '/MyPooling-FE'
-  }
-
   const getQuestion = async () => {
     await axios.get(BASE_URL + "/question/get/" + questionId + "?jwt=" + window.localStorage.getItem("token"))
       .then(response => {
@@ -132,7 +127,6 @@ export default function BasicMenu({ questionId }) {
           onClick={() => {changeStatus('rejected'); handleClose()}}>
           Rifiutata e chiudi
         </MenuItem>
-        <MenuItem style={{ fontSize: 14, fontWeight: 400, fontFamily: 'League Spartan' }} onClick={() => { logout(); handleClose() }}>Logout</MenuItem>
       </Menu>
     </div>
   );

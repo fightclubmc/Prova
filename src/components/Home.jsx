@@ -28,6 +28,8 @@ export const Home = () => {
 
   const [modalStatus, setModalStatus] = useState(false)
 
+  const [isCreatingLoading, setIsCreatingLoading] = useState(false)
+
   const [news, setNews] = useState({
     'name': '',
     'body': ''
@@ -107,6 +109,7 @@ export const Home = () => {
   }
 
   const addNews = () => {
+    setIsCreatingLoading(true)
     axios.post(BASE_URL + '/news/add', {
       'title': news.name,
       'owner_id': jwt(window.localStorage.getItem("token")).sub.user_id,
@@ -115,6 +118,7 @@ export const Home = () => {
       .then(response => {
         getNewses()
         setModalStatus(false)
+        setIsCreatingLoading(false)
       })
       .catch(error => console.log(error))
   }
@@ -151,10 +155,16 @@ export const Home = () => {
                     />
                     <div className='mt-14 justify-around flex'>
                       {
-                        news.name.length > 40 || news.body.length < 84 ? (
+                        news.name == "" || news.body.length < 84 ? (
                           <button style={{ color: 'white', fontFamily: 'League Spartan', borderRadius: 5 }} className='opacity-40 mt-4 p-3 bg-[#d880d9]'>Crea news</button>
                         ) : (
-                          <button onClick={(e) => addNews()} style={{ color: 'white', fontFamily: 'League Spartan', borderRadius: 5 }} className='mt-4 p-3 bg-[#d880d9]'>Crea news</button>
+                          isCreatingLoading ? (
+                            <button style={{ color: 'white', fontFamily: 'League Spartan', borderRadius: 5 }} className='mt-4 p-3 bg-[#d880d9]'>
+                              <SpinnerCircular thickness={158} speed={284} color="white" size={24} enabled={true} />
+                            </button>
+                          ):(
+                            <button onClick={(e) => addNews()} style={{ color: 'white', fontFamily: 'League Spartan', borderRadius: 5 }} className='mt-4 p-3 bg-[#d880d9]'>Crea news</button>
+                          )
                         )
                       }
                     </div>
