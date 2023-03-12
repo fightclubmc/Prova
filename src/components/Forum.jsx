@@ -88,7 +88,7 @@ export const Forum = () => {
                 <div className='mt-4 p-10 bg-[#2a313b]'>
                   {
                     categories.map(category => (
-                      <div onClick={(e) => navigate("/forum/" + category.category_id)} style={{ cursor: 'pointer', borderBottomWidth: 1, borderBottomColor: '#384554', height: 94 }} className="mt-4 justify-between items-center flex-block">
+                      <div onClick={(e) => navigate("/forum/" + category.category_id)} style={{ cursor: 'pointer', borderBottomWidth: 1, borderBottomColor: '#384554', height: 84 }} className="mt-4 justify-between items-center flex-block">
                         <div className="pr-4 pl-4 flex">
                           <div className="text-[#596270] text-2xl"><IonIcon name="chatbox" /></div>
                           <h2 style={{ fontSize: 18, fontWeight: 600, fontFamily: 'League Spartan' }} className='text-xl ml-4 text-[#ffffff]'>{category.name}</h2>

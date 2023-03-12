@@ -99,7 +99,7 @@ export const Questions = () => {
                     />
                     <div className='mt-14 justify-around flex'>
                       {
-                        question.name == "" || question.body.length < 84 ? (
+                        question.name == "" || question.body == "" ? (
                           <button style={{ color: 'white', fontFamily: 'League Spartan', borderRadius: 5 }} className='opacity-40 mt-4 p-3 bg-[#d880d9]'>Crea discussione</button>
                         ) : (
                           <button onClick={(e) => {addQuestion(); getQuestions(); setModalStatus(false)}} style={{ color: 'white', fontFamily: 'League Spartan', borderRadius: 5 }} className='mt-4 p-3 bg-[#d880d9]'>Crea discussione</button>
@@ -148,7 +148,8 @@ export const Questions = () => {
                             </div>
                             <div>
                               <div className="flex">
-                                <h2 style={{ fontSize: 18, fontWeight: 600, fontFamily: 'League Spartan' }} className='text-xl ml-4 text-[#ffffff]'>{question.name}</h2>
+                                <h2 style={{ fontSize: 18, fontWeight: 600, fontFamily: 'League Spartan' }} className='none-block text-xl ml-4 text-[#ffffff]'>{question.name.length > 8 ? question.name.substring(0,8) + "..." : question.name}</h2>
+                                <h2 style={{ fontSize: 18, fontWeight: 600, fontFamily: 'League Spartan' }} className='block-none text-xl ml-4 text-[#ffffff]'>{question.name}</h2>
                                 <div style={{ width: 78 }} className="items-center ml-2 text-2xl justify-around flex">
                                   {
                                     question.status == 'just_created' &&

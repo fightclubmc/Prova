@@ -122,14 +122,13 @@ export const Question = () => {
           <div className='w-screen justify-around bodyhome flex'>
             <div>
               <div style={{ maxWidth: 1040 }} className='mb-14 pl-8 mt-10 pr-14'>
-                <div style={{ borderRadius: 8, fontFamily: 'League Spartan', height: 64 }} className='justify-between pl-10 pr-10 font-bold flex items-center text-[#ffffff] bg-[#2a313b]'>
+                <div style={{ borderRadius: 8, fontFamily: 'League Spartan', height: 64 }} className='justify-between pr-2 pl-8 font-bold flex items-center text-[#ffffff] bg-[#2a313b]'>
                   <div>
-                    <h2>{question.name}</h2>
+                    <h2 className='none-block'>{question.name.length > 8 ? question.name.substring(0,8) + "..." : question.name}</h2>
+                    <h2 className='block-none'>{question.name}</h2>
                     <h2 className='text-[#596270]'>{question.owner.minecraft_username} - {fixDate(question.created_on)}</h2>
                   </div>
-                  <div>
-                    <BasicMenu questionId={questionId} />
-                  </div>
+                  <BasicMenu questionId={questionId} />
                 </div>
                 <div style={{ borderRadius: 8 }} className='bodyhome mt-4 flex p-10 bg-[#2a313b]'>
                   <div>
@@ -176,14 +175,21 @@ export const Question = () => {
                         </div>
                         <div className='items-center justify-around flex'>
                           {
-                            message.likeable ? (
+                            message.owner_id != jwt(window.localStorage.getItem("token")).sub.user_id ? (
+                              message.likeable ? (
+                                <div>
+                                  <div style={{ cursor: 'pointer' }} onClick={(e) => addLike(message.message_id)} className='text-[#d880d9] text-3xl'><IonIcon name='heart' /></div>
+                                  <h2 className='font-bold text-[#ffffff] text-xl' style={{ fontFamily: 'League Spartan', textAlign: 'center' }}>{message.likes}</h2>
+                                </div>
+                              ) : (
+                                <div>
+                                  <div style={{ cursor: 'pointer' }} onClick={(e) => removeLike(message.message_id)} className='text-[#d880d9] text-3xl'><IonIcon name='heart-dislike' /></div>
+                                  <h2 className='font-bold text-[#ffffff] text-xl' style={{ fontFamily: 'League Spartan', textAlign: 'center' }}>{message.likes}</h2>
+                                </div>
+                              )
+                            ):(
                               <div>
-                                <div style={{ cursor: 'pointer' }} onClick={(e) => addLike(message.message_id)} className='text-[#d880d9] text-3xl'><IonIcon name='heart' /></div>
-                                <h2 className='font-bold text-[#ffffff] text-xl' style={{ fontFamily: 'League Spartan', textAlign: 'center' }}>{message.likes}</h2>
-                              </div>
-                            ) : (
-                              <div>
-                                <div style={{ cursor: 'pointer' }} onClick={(e) => removeLike(message.message_id)} className='text-[#d880d9] text-3xl'><IonIcon name='heart-dislike' /></div>
+                                <div style={{ cursor: 'pointer' }} className='text-[#d880d9] text-3xl'><IonIcon name='heart' /></div>
                                 <h2 className='font-bold text-[#ffffff] text-xl' style={{ fontFamily: 'League Spartan', textAlign: 'center' }}>{message.likes}</h2>
                               </div>
                             )
@@ -221,7 +227,7 @@ export const Question = () => {
                         style={{ color: 'white', border: 'none', outline: 'none', backgroundColor: '#2a313b' }}
                       />
                       {
-                        message.length < 54 ? (
+                        message == "" ? (
                           <button style={{ color: 'white', fontFamily: 'League Spartan', borderRadius: 5 }} className='opacity-40 mt-4 p-3 bg-[#d880d9]'>Invia messaggio</button>
                         ) : (
                           <button onClick={(e) => { addMessage(); setMessage("") }} style={{ color: 'white', fontFamily: 'League Spartan', borderRadius: 5 }} className='mt-4 p-3 bg-[#d880d9]'>Invia messaggio</button>

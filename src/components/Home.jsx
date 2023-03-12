@@ -61,7 +61,7 @@ export const Home = () => {
       case 'Admin':
         return '#ad2cd1'
         break;
-      case 'Moderatore':
+      case 'Mod':
         return '#ded123'
         break;
       case 'Developer':
@@ -155,7 +155,7 @@ export const Home = () => {
                     />
                     <div className='mt-14 justify-around flex'>
                       {
-                        news.name == "" || news.body.length < 84 ? (
+                        news.name == "" || news.body == "" ? (
                           <button style={{ color: 'white', fontFamily: 'League Spartan', borderRadius: 5 }} className='opacity-40 mt-4 p-3 bg-[#d880d9]'>Crea news</button>
                         ) : (
                           isCreatingLoading ? (

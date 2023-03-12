@@ -22,6 +22,9 @@
   .none-flex{
     display: flex !important;
   }
+  .none-block{
+    display: block !important;
+  }
 }
 
 .flex-block{
@@ -34,6 +37,10 @@
 
 .block-none{
   display: block;
+}
+
+.none-block{
+  display: none;
 }
 
 .flex-none{
