@@ -156,31 +156,32 @@ export const Question = () => {
                   <div className='p-10'>
                     <h4 className='text-[#ffffff]' style={{ fontSize: 16, fontFamily: 'League Spartan' }}>{messages[messages.length - 1]?.body}</h4>
                   </div>
+                  <div style={{width: 1040}}></div>
                 </div>
               </div>
-              <div style={{minWidth: 1040, overflowY: 'scroll', maxHeight: 640}}>
+              <div style={{ overflowY:'scroll', maxHeight: 740, maxWidth: 1040 }} className='mb-14 pl-8 mt-10 pr-14'>
               {
                 messages.map((message, iteration) => (
                   iteration > 0 &&
-                  <div style={{ width: 1040 }} className='pl-8 mt-4 pr-14'>
-                    <div className='flex'>
-                      <div style={{ borderRadius: 8 }} className='bodyhome mt-4 flex p-10 bg-[#2a313b]'>
-                        <div>
-                          <div className='justify-around flex'>
-                            <div style={{ width: 114 }}>
-                              <Avatar
-                                size={40}
-                                name={message.owner.minecraft_username}
-                                variant="beam"
-                                colors={["#9d2b88", "#9d2b87", "#d880d9", "#d164bd", "#d173bf"]}
-                              />
+                      <div style={{ borderRadius: 8 }} className='justify-between bodyhome mt-4 flex p-10 bg-[#2a313b]'>
+                        <div className='flex'>
+                          <div>
+                            <div className='justify-around flex'>
+                              <div style={{ width: 114 }}>
+                                <Avatar
+                                  size={40}
+                                  name={message.owner.minecraft_username}
+                                  variant="beam"
+                                  colors={["#9d2b88", "#9d2b87", "#d880d9", "#d164bd", "#d173bf"]}
+                                />
+                              </div>
                             </div>
+                            <div className='justify-around items-center flex'><h2 style={{ fontFamily: 'League Spartan' }} className='mt-4 text-xl text-[#ffffff]'>{message.owner.minecraft_username}</h2></div>
+                            <div className=' mt-4 text-xl items-center justify-around flex' style={{ borderRadius: 5, backgroundColor: stafferColor(message.owner.role) }}><h2 style={{ fontSize: 14, fontWeight: 600, fontFamily: 'League Spartan' }} className='text-[#ffffff]'>{message.owner.role}</h2></div>
                           </div>
-                          <div className='justify-around items-center flex'><h2 style={{ fontFamily: 'League Spartan' }} className='mt-4 text-xl text-[#ffffff]'>{message.owner.minecraft_username}</h2></div>
-                          <div className=' mt-4 text-xl items-center justify-around flex' style={{ borderRadius: 5, backgroundColor: stafferColor(message.owner.role) }}><h2 style={{ fontSize: 14, fontWeight: 600, fontFamily: 'League Spartan' }} className='text-[#ffffff]'>{message.owner.role}</h2></div>
-                        </div>
-                        <div className='p-10'>
-                          <h4 className='text-[#ffffff]' style={{ fontSize: 16, fontFamily: 'League Spartan' }}>{message.body}</h4>
+                          <div className='p-10'>
+                            <h4 className='text-[#ffffff]' style={{ fontSize: 16, fontFamily: 'League Spartan' }}>{message.body}</h4>
+                          </div>
                         </div>
                         <div className='items-center justify-around flex'>
                           <div className='block-none'>
@@ -227,8 +228,6 @@ export const Question = () => {
                           </div>
                         </div>
                       </div>
-                    </div>
-                  </div>
                 ))
               }
               </div>
