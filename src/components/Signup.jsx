@@ -64,7 +64,7 @@ export const Signup = () => {
             </div>
             <div className="mt-4">
               <h2 className="text-[#ffffff]" style={{fontFamily: 'League Spartan'}}>Password</h2>
-              <input name="password" value={user.password} onChange={(e) => handleUser(e)} style={{borderRadius: 5}} className="p-1 bg-[#596270]" type="text" />
+              <input name="password" value={user.password} onChange={(e) => handleUser(e)} style={{borderRadius: 5}} className="p-1 bg-[#596270]" type="password" />
             </div>
           </div>
         </div>

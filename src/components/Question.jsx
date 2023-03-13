@@ -175,24 +175,17 @@ export const Question = () => {
                         </div>
                         <div className='items-center justify-around flex'>
                           {
-                            message.owner_id != jwt(window.localStorage.getItem("token")).sub.user_id ? (
                               message.likeable ? (
                                 <div>
-                                  <div style={{ cursor: 'pointer' }} onClick={(e) => addLike(message.message_id)} className='text-[#d880d9] text-3xl'><IonIcon name='heart' /></div>
+                                  <div style={{ cursor: 'pointer' }} onClick={(e) => addLike(message.message_id)} className='text-[#d880d9] text-3xl'><IonIcon name='heart-outline' /></div>
                                   <h2 className='font-bold text-[#ffffff] text-xl' style={{ fontFamily: 'League Spartan', textAlign: 'center' }}>{message.likes}</h2>
                                 </div>
                               ) : (
                                 <div>
-                                  <div style={{ cursor: 'pointer' }} onClick={(e) => removeLike(message.message_id)} className='text-[#d880d9] text-3xl'><IonIcon name='heart-dislike' /></div>
+                                  <div style={{ cursor: 'pointer' }} onClick={(e) => removeLike(message.message_id)} className='text-[#d880d9] text-3xl'><IonIcon name='heart' /></div>
                                   <h2 className='font-bold text-[#ffffff] text-xl' style={{ fontFamily: 'League Spartan', textAlign: 'center' }}>{message.likes}</h2>
                                 </div>
                               )
-                            ):(
-                              <div>
-                                <div style={{ cursor: 'pointer' }} className='text-[#d880d9] text-3xl'><IonIcon name='heart' /></div>
-                                <h2 className='font-bold text-[#ffffff] text-xl' style={{ fontFamily: 'League Spartan', textAlign: 'center' }}>{message.likes}</h2>
-                              </div>
-                            )
                           }
                         </div>
                       </div>

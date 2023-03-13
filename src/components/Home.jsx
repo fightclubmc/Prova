@@ -162,7 +162,7 @@ export const Home = () => {
                             <button style={{ color: 'white', fontFamily: 'League Spartan', borderRadius: 5 }} className='mt-4 p-3 bg-[#d880d9]'>
                               <SpinnerCircular thickness={158} speed={284} color="white" size={24} enabled={true} />
                             </button>
-                          ):(
+                          ) : (
                             <button onClick={(e) => addNews()} style={{ color: 'white', fontFamily: 'League Spartan', borderRadius: 5 }} className='mt-4 p-3 bg-[#d880d9]'>Crea news</button>
                           )
                         )
@@ -267,24 +267,10 @@ export const Home = () => {
                                 <h2 style={{ fontFamily: 'League Spartan' }} className='text-sm text-[#596270]'>{recentUser.name}</h2>
                               </div>
                             </div>
-                            {
-                              iteration == 0 &&
-                              <div style={{ width: 40 }}>
-                                <span className='font-bold text-[#f5c269]'>1°</span>
-                              </div>
-                            }
-                            {
-                              iteration == 1 &&
-                              <div style={{ width: 40 }}>
-                                <span className='font-bold text-[#a6a6a6]'>2°</span>
-                              </div>
-                            }
-                            {
-                              iteration == 2 &&
-                              <div style={{ width: 40 }}>
-                                <span className='font-bold text-[#78554a]'>3°</span>
-                              </div>
-                            }
+                            <div className='pr-4' style={{textAlign: 'center'}}>
+                              <div><span style={{fontFamily: 'League Spartan', fontSize: 14}} className='font-bold text-[#596270]'>Messaggi</span></div>
+                              <div><span style={{fontSize: 14, fontFamily: 'League Spartan'}} className='font-bold text-[white]'>{recentUser.messages}</span></div>
+                            </div>
                           </div>
                         ))
                       }
