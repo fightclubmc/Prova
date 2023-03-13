@@ -113,6 +113,14 @@ export const Question = () => {
       .catch(error => console.log(error))
   }
 
+    const removeMessage = async (messageId) => {
+      await axios.delete(BASE_URL + '/message/remove/' + messageId + "?jwt=" + window.localStorage.getItem("token"))
+      .then(response => {
+        getMessages()
+      })
+      .catch(error => console.log(error))
+  }
+
   return (
     <div className="justify-around flex w-screen bg-[#242a33]">
       {
@@ -174,6 +182,7 @@ export const Question = () => {
                           <h4 className='text-[#ffffff]' style={{ fontSize: 16, fontFamily: 'League Spartan' }}>{message.body}</h4>
                         </div>
                         <div className='items-center justify-around flex'>
+                          <div>
                           {
                               message.likeable ? (
                                 <div>
@@ -187,6 +196,10 @@ export const Question = () => {
                                 </div>
                               )
                           }
+                          <div className='justify-around flex mt-5'>
+                            <div style={{fontSize: 24, cursor: 'pointer' }} onClick={(e) => removeMessage(message.message_id)} className='text-[#e07a65]'><IonIcon name='trash' /></div>
+                          </div>
+                          </div>
                         </div>
                       </div>
                     </div>
