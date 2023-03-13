@@ -144,24 +144,25 @@ export const Question = () => {
                       <div style={{ width: 114 }}>
                         <Avatar
                           size={40}
-                          name={messages[0]?.owner.minecraft_username}
+                          name={messages[messages.length - 1]?.owner.minecraft_username}
                           variant="beam"
                           colors={["#9d2b88", "#9d2b87", "#d880d9", "#d164bd", "#d173bf"]}
                         />
                       </div>
                     </div>
-                    <div className='justify-around items-center flex'><h2 style={{ fontFamily: 'League Spartan' }} className='mt-4 text-xl text-[#ffffff]'>{messages[0]?.owner.minecraft_username}</h2></div>
-                    <div className=' mt-4 text-xl items-center justify-around flex' style={{ borderRadius: 5, backgroundColor: stafferColor(messages[0]?.owner.role) }}><h2 style={{ fontSize: 14, fontWeight: 600, fontFamily: 'League Spartan' }} className='text-[#ffffff]'>{messages[0]?.owner.role}</h2></div>
+                    <div className='justify-around items-center flex'><h2 style={{ fontFamily: 'League Spartan' }} className='mt-4 text-xl text-[#ffffff]'>{messages[messages.length - 1]?.owner.minecraft_username}</h2></div>
+                    <div className=' mt-4 text-xl items-center justify-around flex' style={{ borderRadius: 5, backgroundColor: stafferColor(messages[messages.length - 1]?.owner.role) }}><h2 style={{ fontSize: 14, fontWeight: 600, fontFamily: 'League Spartan' }} className='text-[#ffffff]'>{messages[0]?.owner.role}</h2></div>
                   </div>
                   <div className='p-10'>
-                    <h4 className='text-[#ffffff]' style={{ fontSize: 16, fontFamily: 'League Spartan' }}>{messages[0]?.body}</h4>
+                    <h4 className='text-[#ffffff]' style={{ fontSize: 16, fontFamily: 'League Spartan' }}>{messages[messages.length - 1]?.body}</h4>
                   </div>
                 </div>
               </div>
+              <div style={{minWidth: 1040, overflowY: 'scroll', maxHeight: 640}}>
               {
                 messages.map((message, iteration) => (
                   iteration > 0 &&
-                  <div style={{ maxWidth: 1040 }} className='pl-8 mt-4 pr-14'>
+                  <div style={{ width: 1040 }} className='pl-8 mt-4 pr-14'>
                     <div className='flex'>
                       <div style={{ borderRadius: 8 }} className='bodyhome mt-4 flex p-10 bg-[#2a313b]'>
                         <div>
@@ -182,11 +183,11 @@ export const Question = () => {
                           <h4 className='text-[#ffffff]' style={{ fontSize: 16, fontFamily: 'League Spartan' }}>{message.body}</h4>
                         </div>
                         <div className='items-center justify-around flex'>
-                          <div>
+                          <div className='block-none'>
                           {
                               message.likeable ? (
                                 <div>
-                                  <div style={{ cursor: 'pointer' }} onClick={(e) => addLike(message.message_id)} className='text-[#d880d9] text-3xl'><IonIcon name='heart-outline' /></div>
+                                  <div style={{cursor: 'pointer' }} onClick={(e) => addLike(message.message_id)} className='text-[#d880d9] text-3xl'><IonIcon name='heart-outline' /></div>
                                   <h2 className='font-bold text-[#ffffff] text-xl' style={{ fontFamily: 'League Spartan', textAlign: 'center' }}>{message.likes}</h2>
                                 </div>
                               ) : (
@@ -196,9 +197,33 @@ export const Question = () => {
                                 </div>
                               )
                           }
-                          <div className='justify-around flex mt-5'>
-                            <div style={{fontSize: 24, cursor: 'pointer' }} onClick={(e) => removeMessage(message.message_id)} className='text-[#e07a65]'><IonIcon name='trash' /></div>
+                          {
+                            message.removable &&
+                            <div className='justify-around flex mt-5'>
+                              <div style={{fontSize: 24, cursor: 'pointer' }} onClick={(e) => removeMessage(message.message_id)} className='text-[#e07a65]'><IonIcon name='trash' /></div>
+                            </div>
+                          }
                           </div>
+                          <div className='none-flex'>
+                          {
+                              message.likeable ? (
+                                <div className='pr-6'>
+                                  <div style={{cursor: 'pointer' }} onClick={(e) => addLike(message.message_id)} className='text-[#d880d9] text-3xl'><IonIcon name='heart-outline' /></div>
+                                  <h2 className='font-bold text-[#ffffff] text-xl' style={{ fontFamily: 'League Spartan', textAlign: 'center' }}>{message.likes}</h2>
+                                </div>
+                              ) : (
+                                <div className='pr-6'>
+                                  <div style={{ cursor: 'pointer' }} onClick={(e) => removeLike(message.message_id)} className='text-[#d880d9] text-3xl'><IonIcon name='heart' /></div>
+                                  <h2 className='font-bold text-[#ffffff] text-xl' style={{ fontFamily: 'League Spartan', textAlign: 'center' }}>{message.likes}</h2>
+                                </div>
+                              )
+                          }
+                          {
+                            message.removable &&
+                            <div className='justify-around flex mt-5'>
+                              <div style={{fontSize: 24, cursor: 'pointer' }} onClick={(e) => removeMessage(message.message_id)} className='text-[#e07a65]'><IonIcon name='trash' /></div>
+                            </div>
+                          }
                           </div>
                         </div>
                       </div>
@@ -206,6 +231,7 @@ export const Question = () => {
                   </div>
                 ))
               }
+              </div>
               <div style={{ maxWidth: 1040 }} className='pl-8 mt-24 pr-14'>
                 {
                   question.closed ? (

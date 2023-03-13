@@ -6,8 +6,8 @@ export const Footer = () => {
   const navigate = useNavigate()
 
   return(
-    <div className="mt-50 items-center justify-around flex" style={{backgroundColor: '#242a33', height: 240}}>
-      <div>
+    <div className="justify-around flex" style={{backgroundColor: '#242a33', height: 424}}>
+      <div style={{alignSelf: 'flex-end'}}>
         <div className="justify-around flex">
           <h2 style={{fontFamily: 'League Spartan'}} className=" text-2xl font-bold text-[#ffffff]">Fightclubmc.net</h2>
         </div>
@@ -20,8 +20,9 @@ export const Footer = () => {
           </div>
         </div>
         <div className="mt-8 justify-around flex">
-          <div><h2 className="text-[#44484d]" style={{fontFamily: 'League Spartan'}}>Copyright ©2023, Made with ❤ by <span className="text-[#D880D9]">albedim</span> with etical support by <span className="text-[#D880D9]">andrex</span>, powered by <span className="text-[#D880D9]">FightClubMc</span></h2></div>
+          <div><h2 className="text-[#44484d]" style={{fontFamily: 'League Spartan'}}>Copyright ©2023, FightClubMC is in no way affiliated with Mojang AB and Microsoft</h2></div>
         </div>
+        <div style={{height: 54}}></div>
       </div>
     </div>
   );
