@@ -77,7 +77,7 @@ export const Question = () => {
       case 'Admin':
         return '#ad2cd1'
         break;
-      case 'Moderatore':
+      case 'Mod':
         return '#ded123'
         break;
       case 'Developer':
