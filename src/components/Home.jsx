@@ -22,9 +22,24 @@ export const Home = () => {
 
   const [newses, setNewses] = useState([])
 
+  const [profile, setProfile] = useState({
+    "admin":"",
+    "created_on":"",
+    "email":"",
+    "likes":0,
+    "messages":0,
+    "minecraft_username":"",
+    "name":"",
+    "questions":0, 
+    "role":"",
+    "user_id":0
+  })
+
   const [isLoading, setIsLoading] = useState(true);
 
   const [popupStatus, setPopupStatus] = useState(false)
+
+  const [profileModalStatus, setProfileModalStatus] = useState(false)
 
   const [modalStatus, setModalStatus] = useState(false)
 
@@ -131,6 +146,49 @@ export const Home = () => {
         ) : (
           <>
             <Modal
+              open={profileModalStatus}
+              onClose={() => setProfileModalStatus(false)}
+              aria-labelledby="parent-modal-title"
+              aria-describedby="parent-modal-description"
+            >
+              <Box sx={{ outline: 'none', border: 'none', justifyContent: 'space-around', display: 'flex', borderRadius: 2, position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', width: 400, boxShadow: 24, pt: 2, px: 4, pb: 3, width: 400 }}>
+                <div style={{ borderRadius: 8 }} className='bodyhome mt-4 flex p-10 bg-[#2a313b]'>
+                  <div>
+                    <div className='justify-around flex'>
+                      <div style={{ width: 94 }}>
+                        <Avatar
+                          size={40}
+                          name={profile.minecraft_username}
+                          variant="beam"
+                          colors={["#9d2b88", "#9d2b87", "#d880d9", "#d164bd", "#d173bf"]}
+                        />
+                      </div>
+                    </div>
+                    <div className=' mt-4 text-xl items-center justify-around flex' style={{ borderRadius: 5, backgroundColor: stafferColor(profile.role) }}><h2 style={{ fontSize: 14, fontWeight: 600, fontFamily: 'League Spartan' }} className='text-[#ffffff]'>{profile.role}</h2></div>
+                  </div>
+                  <div className='pl-4'>
+                    <div className='pt-4 pl-6'>
+                      <h2 style={{ fontSize: 18, fontFamily: 'League Spartan'}} className='font-bold text-[#ffffff]'>{profile.minecraft_username}</h2>
+                      <h2 style={{ fontSize: 16, fontFamily: 'League Spartan'}} className='text-[#596270]'>{profile.name}</h2>
+                    </div>
+                    <div className='pt-1 pl-6'>
+                      <h2 style={{ fontSize: 14, fontFamily: 'League Spartan'}} className='font-bold text-[#596270]'>Membro dal {fixDate(profile.created_on)}</h2>
+                    </div>
+                    <div className='pl-6 pt-4 flex'>
+                      <div className='p-2'>
+                        <h2 style={{ fontSize: 14, fontFamily: 'League Spartan'}} className='font-bold text-[#ffffff]'>Discussioni</h2>
+                        <h2 style={{textAlign: 'center', fontSize: 14, fontFamily: 'League Spartan'}} className='font-bold text-[#596270]'>{profile.questions}</h2>
+                      </div>
+                      <div className='p-2'>
+                        <h2 style={{ fontSize: 14, fontFamily: 'League Spartan'}} className='font-bold text-[#ffffff]'>Messaggi</h2>
+                        <h2 style={{textAlign: 'center', fontSize: 14, fontFamily: 'League Spartan'}} className='font-bold text-[#596270]'>{profile.messages}</h2>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </Box>
+            </Modal>
+            <Modal
               open={modalStatus}
               onClose={() => setModalStatus(false)}
               aria-labelledby="parent-modal-title"
@@ -198,7 +256,7 @@ export const Home = () => {
                         </div>
                       </div>
                       <div style={{ borderRadius: 8 }} className='bodyhome mt-4 flex p-10 bg-[#2a313b]'>
-                        <div>
+                        <div style={{cursor: 'pointer'}} onClick={(e) => {setProfile(iterationNews.owner); setProfileModalStatus(true)}}>
                           <div className='justify-around flex'>
                             <div style={{ width: 114 }}>
                               <Avatar
@@ -229,7 +287,7 @@ export const Home = () => {
                     <div>
                       {
                         staffers.map(staffer => (
-                          <div style={{ borderTopColor: '#384554', borderTopWidth: 1, height: 74 }} className='items-center flex'>
+                          <div onClick={(e) => {setProfile(staffer); setProfileModalStatus(true)}} style={{cursor: 'pointer', borderTopColor: '#384554', borderTopWidth: 1, height: 74 }} className='items-center flex'>
                             <div className='ml-4' style={{ width: 38 }}>
                               <Avatar
                                 size={40}
@@ -254,7 +312,7 @@ export const Home = () => {
                     <div>
                       {
                         recentUsers.map((recentUser, iteration) => (
-                          <div style={{ borderTopColor: '#384554', borderTopWidth: 1, height: 74 }} className='justify-between items-center flex'>
+                          <div onClick={(e) => {setProfile(recentUser); setProfileModalStatus(true)}} style={{ cursor: 'pointer', borderTopColor: '#384554', borderTopWidth: 1, height: 74 }} className='justify-between items-center flex'>
                             <div className='flex'>
                               <div className='ml-4' style={{ width: 38 }}>
                                 <Avatar
