@@ -166,7 +166,26 @@ export const Home = () => {
                     </div>
                     <div className=' mt-4 text-xl items-center justify-around flex' style={{ borderRadius: 5, backgroundColor: stafferColor(profile.role) }}><h2 style={{ fontSize: 14, fontWeight: 600, fontFamily: 'League Spartan' }} className='text-[#ffffff]'>{profile.role}</h2></div>
                   </div>
-                  <div className='pl-4'>
+                  <div className='block-none pl-4'>
+                    <div className='pt-4 pl-6'>
+                      <h2 style={{ fontSize: 18, fontFamily: 'League Spartan'}} className='font-bold text-[#ffffff]'>{profile.minecraft_username}</h2>
+                      <h2 style={{ fontSize: 16, fontFamily: 'League Spartan'}} className='text-[#596270]'>{profile.name}</h2>
+                    </div>
+                    <div className='pt-1 pl-6'>
+                      <h2 style={{ fontSize: 14, fontFamily: 'League Spartan'}} className='font-bold text-[#596270]'>Membro dal {fixDate(profile.created_on)}</h2>
+                    </div>
+                    <div className='pl-6 pt-4 flex'>
+                      <div className='p-2'>
+                        <h2 style={{ fontSize: 14, fontFamily: 'League Spartan'}} className='font-bold text-[#ffffff]'>Discussioni</h2>
+                        <h2 style={{textAlign: 'center', fontSize: 14, fontFamily: 'League Spartan'}} className='font-bold text-[#596270]'>{profile.questions}</h2>
+                      </div>
+                      <div className='p-2'>
+                        <h2 style={{ fontSize: 14, fontFamily: 'League Spartan'}} className='font-bold text-[#ffffff]'>Messaggi</h2>
+                        <h2 style={{textAlign: 'center', fontSize: 14, fontFamily: 'League Spartan'}} className='font-bold text-[#596270]'>{profile.messages}</h2>
+                      </div>
+                    </div>
+                  </div>
+                  <div className='none-block pl-4'>
                     <div className='pt-4 pl-6'>
                       <h2 style={{ fontSize: 18, fontFamily: 'League Spartan'}} className='font-bold text-[#ffffff]'>{profile.minecraft_username}</h2>
                       <h2 style={{ fontSize: 16, fontFamily: 'League Spartan'}} className='text-[#596270]'>{profile.name}</h2>

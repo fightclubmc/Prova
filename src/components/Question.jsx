@@ -265,7 +265,7 @@ export const Question = () => {
                               </div>
                             }
                           </div>
-                          <div className='none-flex'>
+                          <div className='pt-14 none-flex'>
                             {
                               message.likeable ? (
                                 <div className='pr-6'>
