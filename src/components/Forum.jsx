@@ -137,7 +137,7 @@ export const Forum = () => {
                   {
                     jwt(window.localStorage.getItem("token")).sub.admin &&
                     <div style={{ maxWidth: 1040 }} className='justify-around flex pl-8 mt-14 pr-14'>
-                      <div onClick={(e) => setModalStatus(true)} style={{ color: '#D880D9', fontSize: 34 }}><IonIcon name='add-circle' /></div>
+                      <div onClick={(e) => setModalStatus(true)} style={{cursor: 'pointer', color: '#D880D9', fontSize: 34 }}><IonIcon name='add-circle' /></div>
                     </div>
                   }
                 </div>

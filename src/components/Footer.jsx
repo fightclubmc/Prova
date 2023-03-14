@@ -16,7 +16,7 @@ export const Footer = () => {
             <div onClick={(e) => navigate("/")} className="font-bold text-[#596270]" style={{cursor: 'pointer', fontSize: 24, fontFamily: 'League Spartan'}}><IonIcon name="home"/></div>
             <h2 onClick={(e) => navigate("/forum")} className="ml-4 font-bold text-[#596270]" style={{cursor: 'pointer', fontSize: 24, fontFamily: 'League Spartan'}}><IonIcon name="chatbubbles"/></h2>
             <h2 onClick={(e) => navigate("/signin")} className="ml-4 font-bold text-[#596270]" style={{cursor: 'pointer', fontSize: 24, fontFamily: 'League Spartan'}}><IonIcon name="log-in"/></h2>
-            <h2 onClick={(e) => navigate("/signup")} className="ml-4 font-bold text-[#596270]" style={{cursor: 'pointer', fontSize: 24, fontFamily: 'League Spartan'}}><IonIcon name="logo-discord"/></h2>
+            <h2 onClick={(e) => window.location.href = "https://discord.gg/ayZbpG4G"} className="ml-4 font-bold text-[#596270]" style={{cursor: 'pointer', fontSize: 24, fontFamily: 'League Spartan'}}><IonIcon name="logo-discord"/></h2>
           </div>
         </div>
         <div className="mt-8 justify-around flex">

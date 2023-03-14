@@ -254,13 +254,13 @@ export const Home = () => {
                 <div style={{ maxWidth: 1040 }} className='pl-8 mt-14 pr-14'>
                   <div style={{ borderRadius: 10, fontFamily: 'League Spartan', height: 64 }} className='justify-between pl-10 pr-10 font-bold flex items-center text-[#ffffff] bg-[#2a313b]'>
                     <div className='flex'>
-                      <IonIcon style={{ color: '#D880D9', fontSize: 18 }} name="newspaper" />
+                      <IonIcon style={{color: '#D880D9', fontSize: 18 }} name="newspaper" />
                       <h2 className='ml-4 text-xl'>News</h2>
                     </div>
                     {
                       jwt(window.localStorage.getItem("token")).sub.admin &&
                         <div style={{height: 64}} className='items-center justify-around flex'>
-                          <div className='justify-around items-center flex' onClick={(e) => setModalStatus(true)} style={{ color: '#D880D9', fontSize: 24 }}><IonIcon name='add-circle' /></div>
+                          <div className='justify-around items-center flex' onClick={(e) => setModalStatus(true)} style={{cursor: 'pointer', color: '#D880D9', fontSize: 24 }}><IonIcon name='add-circle' /></div>
                         </div>
                     }
                   </div>

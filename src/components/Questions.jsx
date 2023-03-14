@@ -87,7 +87,7 @@ export const Questions = () => {
                     <input onChange={(e) => handleQuestion(e)} name='name' style={{ borderRadius: 10, height: 34, color: 'white', border: 'none', outline: 'none', backgroundColor: '#2a313b' }} className='bg-[gray]' type="text" />
                   </div>
                   <div className='mt-4'>
-                    <h2 style={{ fontFamily: 'League Spartan' }} className='text-[#ffffff]'>Corpo della discussione</h2>
+                    <h2 style={{ fontFamily: 'League Spartan' }} className='text-[#ffffff]'>Messaggio</h2>
                     <Textarea
                       disabled={false}
                       value={question.body}
@@ -121,12 +121,12 @@ export const Questions = () => {
                     {
                       category.editable ? (
                         <div>
-                          <div className="items-center justify-around flex pl-8 pr-8" onClick={(e) => setModalStatus(true)} style={{ color: '#D880D9', fontSize: 24 }}><IonIcon name='add-circle' /></div>
+                          <div className="items-center justify-around flex pl-8 pr-8" onClick={(e) => setModalStatus(true)} style={{cursor: 'pointer', color: '#D880D9', fontSize: 24 }}><IonIcon name='add-circle' /></div>
                         </div>
                       ):(
                         jwt(window.localStorage.getItem("token")).sub.admin &&
                           <div>
-                            <div className="items-center justify-around flex pl-8 pr-8" onClick={(e) => setModalStatus(true)} style={{ color: '#D880D9', fontSize: 24 }}><IonIcon name='add-circle' /></div>
+                            <div className="items-center justify-around flex pl-8 pr-8" onClick={(e) => setModalStatus(true)} style={{cursor: 'pointer', color: '#D880D9', fontSize: 24 }}><IonIcon name='add-circle' /></div>
                           </div>
                       )
                     }
