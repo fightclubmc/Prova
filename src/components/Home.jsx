@@ -293,6 +293,7 @@ export const Home = () => {
                           <h4 className='text-[#ffffff]' style={{ fontSize: 16, fontFamily: 'League Spartan' }}>{iterationNews.body}</h4>
                         </div>
                       </div>
+                      <div style={{width: 740}}></div>
                     </div>
                   ))
                 }
